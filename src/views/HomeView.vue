@@ -13,7 +13,7 @@
       </div>
       <div class="text">
         <span>Amount: </span>
-        <a-button ghost type="primary"> {{ amount }} </a-button>
+        <div class="tag">{{ amount }}</div>
       </div>
       <div class="confirm">
         <a-button type="primary" size="large" block :loading="loading" @click="handleClaim">Confirm Airdrop</a-button>
@@ -99,7 +99,7 @@ const handleClaim = () => {
     width: 500px;
     height: auto;
     margin: 0 auto;
-    border: 1px solid #282d2b;
+    border: 1px solid #ffffff1a;
     border-radius: 10px;
     padding: 20px;
     position: relative;
@@ -129,6 +129,18 @@ const handleClaim = () => {
       font-size: 16px;
       display: flex;
       align-items: center;
+      .tag {
+        width: 50px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 5px;
+        text-align: center;
+        font-family: Manrope;
+        font-weight: 700;
+        font-size: 18px;
+        border: 1px solid #0000ff;
+        box-shadow: 0 0 3px 3px rgba(0, 0, 255, 0.3);
+      }
       span {
         margin-right: 20px;
       }

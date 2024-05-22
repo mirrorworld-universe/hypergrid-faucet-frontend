@@ -19,20 +19,12 @@
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('@/assets/fonts/Poppins-Medium.otf');
-}
-@font-face {
-  font-family: 'Inter';
-  src: url('@/assets/fonts/Inter-Regular.woff2');
-}
-@font-face {
   font-family: 'Orbitron';
   src: url('@/assets/fonts/Orbitron.otf');
 }
 @font-face {
   font-family: 'Manrope';
-  src: url('@/assets/fonts/Manrope.otf');
+  src: url('@/assets/fonts/Manrope.ttf');
 }
 
 html,
@@ -45,15 +37,6 @@ body {
   user-select: none;
 }
 
-input,
-textarea {
-  border: none;
-  resize: none;
-  background: transparent;
-  &:focus-visible {
-    border: none;
-  }
-}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
@@ -98,7 +81,14 @@ button {
     }
   }
 }
-.ant-input,
+.ant-input {
+  font-family: Manrope !important;
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.4);
+  &:focus {
+    border-color: #223fdc;
+  }
+}
 .ant-btn {
   font-family: Orbitron !important;
 }

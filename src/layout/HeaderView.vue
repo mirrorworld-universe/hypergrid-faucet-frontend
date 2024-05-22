@@ -11,22 +11,23 @@
 <style lang="scss" scoped>
 header {
   width: 100%;
-  height: 75px;
+  height: 66.5px;
   position: fixed;
   z-index: 99;
-  border-bottom: 1px solid #282d2b;
+  border-bottom: 1px solid #ffffff1a;
   background: #03081c;
 }
 
 nav {
-  width: 1200px;
+  width: 100%;
   height: 100%;
   margin: 0 auto;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   .logo {
     width: auto;
-    height: 80%;
+    height: 40px;
   }
 }
 
