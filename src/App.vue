@@ -3,7 +3,7 @@
     :theme="{
       algorithm: theme.darkAlgorithm,
       token: {
-        colorPrimary: '#2547FF'
+        colorPrimary: '#0000ff'
       }
     }">
     <a-app>

@@ -15,7 +15,6 @@ header {
   position: fixed;
   z-index: 99;
   border-bottom: 1px solid #ffffff1a;
-  background: #03081c;
 }
 
 nav {

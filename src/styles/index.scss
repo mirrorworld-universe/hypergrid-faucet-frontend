@@ -30,7 +30,7 @@
 html,
 body {
   color: #ffffff;
-  background: #03081c;
+  background: #01030c;
   text-rendering: optimizeLegibility;
   transition: color 0.5s, background-color 0.5s;
   -webkit-text-size-adjust: none;
@@ -82,15 +82,24 @@ button {
   }
 }
 .ant-input {
-  font-family: Manrope !important;
+  font-family: Manrope;
   background-color: transparent;
   border-color: rgba(255, 255, 255, 0.4);
   &:focus {
-    border-color: #223fdc;
+    border-color: #0000ff;
   }
 }
 .ant-btn {
-  font-family: Orbitron !important;
+  font-family: Orbitron;
+}
+
+.ant-notification-notice .ant-notification-notice-with-icon {
+  .ant-notification-notice-message {
+    font-family: Orbitron;
+  }
+  .ant-notification-notice-description {
+    font-family: Manrope;
+  }
 }
 
 @media screen and (max-width: 750px) {

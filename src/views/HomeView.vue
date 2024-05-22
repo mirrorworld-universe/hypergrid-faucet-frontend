@@ -37,6 +37,18 @@ const amount = ref('10');
 
 onMounted(() => {
   lastClaimTime.value = Number(localStorage.getItem('lastClaimTime')) || 0;
+
+  notification.success({
+    message: 'Airdrop was successful!',
+    description: () => {
+      return h('a', {
+        href: 'https://explorer.hypergrid.dev/tx/',
+        target: '_blank',
+        innerHTML: 'https://explorer.hypergrid.dev/tx/3U1ECRQ3SqYFrehgb1cmVAZVrvHgcDho3NyuUzUPALRHqSxuvCVKg1rLKuU24CFBBMivxhFAhsdXWp75sZ7Qaiub'
+      });
+    },
+    duration: null
+  });
 });
 
 const handleClaim = () => {
