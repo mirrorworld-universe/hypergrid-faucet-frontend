@@ -6,7 +6,7 @@
       </div>
 
       <div class="title2">
-        <a-button type="primary"><CheckCircleOutlined />https://rpc.hypergrid.dev</a-button>
+        <a-button type="primary" @click="utils.handleCopy(rpc)"><CheckCircleOutlined />{{ rpc }}</a-button>
       </div>
       <div class="inputbox">
         <a-input v-model:value="addressVal" placeholder="Wallet Address" size="large" />
@@ -35,26 +35,17 @@ const loading = ref(false);
 let lastClaimTime = ref(0);
 const amount = ref('10');
 
+const rpc = 'https://rpc.hypergrid.dev';
+const explorer = 'https://explorer.hypergrid.dev/tx/';
+
 onMounted(() => {
   lastClaimTime.value = Number(localStorage.getItem('lastClaimTime')) || 0;
-
-  notification.success({
-    message: 'Airdrop was successful!',
-    description: () => {
-      return h('a', {
-        href: 'https://explorer.hypergrid.dev/tx/',
-        target: '_blank',
-        innerHTML: 'https://explorer.hypergrid.dev/tx/3U1ECRQ3SqYFrehgb1cmVAZVrvHgcDho3NyuUzUPALRHqSxuvCVKg1rLKuU24CFBBMivxhFAhsdXWp75sZ7Qaiub'
-      });
-    },
-    duration: null
-  });
 });
 
 const handleClaim = () => {
   if (loading.value) return;
   if (!addressVal.value) return;
-  console.log('addressVal', addressVal.value);
+  // console.log('addressVal', addressVal.value);
 
   const currentTime = Date.now();
   const timeDiff = currentTime - lastClaimTime.value;
@@ -66,7 +57,7 @@ const handleClaim = () => {
     apis
       .getAirdrop(addressVal.value, amount.value)
       .then((res: any) => {
-        console.log('getAirdrop', res);
+        // console.log('getAirdrop', res);
         loading.value = false;
         if (res.data.data) {
           localStorage.setItem('lastClaimTime', lastClaimTime.value.toString());
@@ -76,15 +67,15 @@ const handleClaim = () => {
             message: 'Airdrop was successful!',
             description: () => {
               return h('a', {
-                href: 'https://explorer.hypergrid.dev/tx/' + tx,
+                href: explorer + tx,
                 target: '_blank',
-                innerHTML: 'https://explorer.hypergrid.dev/tx/' + utils.formatAddr(tx)
+                innerHTML: explorer + utils.formatAddr(tx)
               });
             },
             duration: null
           });
         } else {
-          console.log('res.data.err', res.data.err);
+          // console.log('res.data.err', res.data.err);
           if (
             res.data.err == "error: Invalid value for '<RECIPIENT_ADDRESS>': No such file or directory (os error 2)\n"
           ) {
@@ -97,7 +88,7 @@ const handleClaim = () => {
       .catch((error) => {
         loading.value = false;
         console.log(error);
-        message.error('Claim failed');
+        message.error('Airdrop failed');
       });
   } else {
     message.info('Please wait five minutes to receive it again!');
