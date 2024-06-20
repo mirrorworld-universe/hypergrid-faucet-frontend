@@ -36,9 +36,7 @@ const loading = ref(false);
 
 let lastClaimTime = ref(0);
 const amount = '10';
-const token = ref(
-  '0.Qu2Aqn7BdnAfFOaSy9v_1a7e9zQ2uh7KUaxblpyMOQZcQyXGyKsXI23ha2z9MFOavKdEWRnIzdpf5izabmSi3KR8gM65_V-AS_GfPQjjqPnw1AzfxItEk20jgG5725GalYwShVKRDQ5-L2PBCxMKxMcGlO-_WufpYyyE66kJPI7mCpjhJWPRAQpOsJgjelEyv8b8600QG3diNmVn0zg9u1p3nHbM5T56AVJsxIxBjxx_WcATJVrNkiGgBNFKrNmtcQWLK3nFUp-KBON74dBS4RIT1GUuztNjvFsU2rw2ToSLh90VehoURWQY9TjTsdtaOOjGE5BGwZ8yYczNIXHJqZ2ttuhIlNG5yfg28l_NZRTzFogCqhNpDhb7jFG-xaPw0V9AA6MlZMTK_2owTicv22_jFv8vBrp1E0fXRV0wdgngfa6bv0Vxc7Pmmz2tbti8.2WnkrOivdigua5ttFQT74A.7a06cc29ff2e8aad52fabde3268111b30af781f4e2bde1781fe1d4e378fca740'
-);
+const token = ref('');
 
 const rpc = 'https://rpc.hypergrid.dev';
 const explorer = 'https://explorer.hypergrid.dev/tx/';
