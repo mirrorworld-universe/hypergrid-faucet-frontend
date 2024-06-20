@@ -48,6 +48,7 @@ onMounted(() => {
 const handleClaim = () => {
   if (loading.value) return;
   if (!addressVal.value) return;
+  if (!token.value) return;
   // console.log('addressVal', addressVal.value);
 
   const currentTime = Date.now();
@@ -58,7 +59,7 @@ const handleClaim = () => {
     loading.value = true;
 
     apis
-      .getAirdrop(addressVal.value, amount)
+      .getAirdrop(addressVal.value, amount, token.value)
       .then((res: any) => {
         // console.log('getAirdrop', res);
         loading.value = false;
