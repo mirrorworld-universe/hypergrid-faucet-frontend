@@ -33,7 +33,7 @@ import VueTurnstile from 'vue-turnstile';
 
 const rpc = 'https://rpc.hypergrid.dev';
 const explorer = 'https://explorer.hypergrid.dev/tx/';
-const amount = '10';
+const amount = '1';
 const addressVal = ref('');
 const token = ref('');
 const loading = ref(false);
@@ -41,13 +41,12 @@ const loading = ref(false);
 const handleClaim = () => {
   if (loading.value) return;
   if (!addressVal.value) return;
-  if (!token.value) return;
 
   const currentTime = Date.now();
   const lastClaimTime = Number(localStorage.getItem('lastClaimTime')) || 0;
   const timeDiff = currentTime - lastClaimTime;
 
-  if (timeDiff >= 5 * 60 * 1000) {
+  if (timeDiff >= 86400000) {
     loading.value = true;
     apis
       .getAirdrop(addressVal.value, amount, token.value)
@@ -87,7 +86,7 @@ const handleClaim = () => {
         message.error('Airdrop failed');
       });
   } else {
-    message.info('Please wait five minutes to receive it again!');
+    message.info('Please allow 24 hours to receive it again!');
   }
 };
 </script>
