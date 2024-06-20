@@ -1,6 +1,6 @@
 {
   "name": "hypergrid-faucet-frontend",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "scripts": {
     "start": "vite",
@@ -15,6 +15,7 @@
     "animate.css": "^4.1.1",
     "ant-design-vue": "^4.0.7",
     "axios": "^1.4.0",
+    "ethers": "^5.7.2",
     "files-from-path": "^1.0.0",
     "nft.storage": "^7.1.0",
     "particles.js": "^2.0.0",
@@ -24,10 +25,10 @@
     "vue": "^3.3.4",
     "vue-countup-v3": "^1.4.0",
     "vue-router": "^4.2.2",
+    "vue-turnstile": "^1.0.9",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0",
-    "wow.js": "^1.2.2",
-    "ethers": "^5.7.2"
+    "wow.js": "^1.2.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.3.2",

@@ -15,6 +15,8 @@
         <span>Amount: </span>
         <div class="tag">{{ amount }}</div>
       </div>
+      <vue-turnstile site-key="0x4AAAAAAAc5PDWj7n4NdQwS" v-model="token" />
+      <div>Token: {{ token }}</div>
       <div class="confirm">
         <a-button type="primary" size="large" block :loading="loading" @click="handleClaim">Confirm Airdrop</a-button>
       </div>
@@ -28,12 +30,14 @@ import { message, notification } from 'ant-design-vue';
 import { CheckCircleOutlined } from '@ant-design/icons-vue';
 import apis from '@/apis';
 import utils from '@/utils';
+import VueTurnstile from 'vue-turnstile';
 
 const addressVal = ref('');
 const loading = ref(false);
 
 let lastClaimTime = ref(0);
 const amount = ref('10');
+const token = ref('');
 
 const rpc = 'https://rpc.hypergrid.dev';
 const explorer = 'https://explorer.hypergrid.dev/tx/';
