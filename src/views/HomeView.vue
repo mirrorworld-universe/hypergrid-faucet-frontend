@@ -16,7 +16,6 @@
         <div class="tag">{{ amount }}</div>
       </div>
       <vue-turnstile site-key="0x4AAAAAAAc5PDWj7n4NdQwS" v-model="token" />
-      <div>Token: {{ token }}</div>
       <div class="confirm">
         <a-button type="primary" size="large" block :loading="loading" @click="handleClaim">Confirm Airdrop</a-button>
       </div>
@@ -36,7 +35,7 @@ const addressVal = ref('');
 const loading = ref(false);
 
 let lastClaimTime = ref(0);
-const amount = ref('10');
+const amount = '10';
 const token = ref('');
 
 const rpc = 'https://rpc.hypergrid.dev';
@@ -59,7 +58,7 @@ const handleClaim = () => {
     loading.value = true;
 
     apis
-      .getAirdrop(addressVal.value, amount.value)
+      .getAirdrop(addressVal.value, amount)
       .then((res: any) => {
         // console.log('getAirdrop', res);
         loading.value = false;
