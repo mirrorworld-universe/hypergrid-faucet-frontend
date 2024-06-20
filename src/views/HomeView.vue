@@ -31,31 +31,23 @@ import apis from '@/apis';
 import utils from '@/utils';
 import VueTurnstile from 'vue-turnstile';
 
-const addressVal = ref('');
-const loading = ref(false);
-
-let lastClaimTime = ref(0);
-const amount = '10';
-const token = ref('');
-
 const rpc = 'https://rpc.hypergrid.dev';
 const explorer = 'https://explorer.hypergrid.dev/tx/';
-
-onMounted(() => {
-  lastClaimTime.value = Number(localStorage.getItem('lastClaimTime')) || 0;
-});
+const amount = '10';
+const addressVal = ref('');
+const token = ref('');
+const loading = ref(false);
 
 const handleClaim = () => {
   if (loading.value) return;
   if (!addressVal.value) return;
   if (!token.value) return;
-  // console.log('addressVal', addressVal.value);
 
   const currentTime = Date.now();
-  const timeDiff = currentTime - lastClaimTime.value;
+  const lastClaimTime = Number(localStorage.getItem('lastClaimTime')) || 0;
+  const timeDiff = currentTime - lastClaimTime;
 
   if (timeDiff >= 5 * 60 * 1000) {
-    lastClaimTime.value = currentTime;
     loading.value = true;
     apis
       .getAirdrop(addressVal.value, amount, token.value)
@@ -65,7 +57,7 @@ const handleClaim = () => {
 
         if (res.data.data) {
           if (res.data.data.error) return message.error(res.data.data.error);
-          localStorage.setItem('lastClaimTime', lastClaimTime.value.toString());
+          localStorage.setItem('lastClaimTime', currentTime.toString());
           const tx = res.data.data.replace(/\n/g, '').replace('Signature: ', '');
           console.log('tx', tx);
           notification.success({
