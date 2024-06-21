@@ -82,8 +82,12 @@ const handleClaim = () => {
       })
       .catch((error) => {
         loading.value = false;
-        console.log(error);
-        message.error('Airdrop failed');
+        console.error(error);
+        if (error.status == 429) {
+          message.error(error.data.message);
+        } else {
+          message.error('Airdrop failed');
+        }
       });
   } else {
     message.info('Please allow 24 hours to receive it again!');
