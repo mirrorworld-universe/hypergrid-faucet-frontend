@@ -17,7 +17,7 @@
         <span>Amount: </span>
         <div class="tag">{{ amount }}</div>
       </div>
-      <vue-turnstile site-key="0x4AAAAAAAc6HG1RMG_8EHSC" v-model="token" />
+      <vue-turnstile site-key="0x4AAAAAAAc8YzDsLfIE_who" v-model="token" />
       <div class="confirm">
         <a-button type="primary" size="large" block :loading="loading" @click="handleClaim">Confirm Airdrop</a-button>
       </div>
