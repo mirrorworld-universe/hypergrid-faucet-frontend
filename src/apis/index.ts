@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
 export default {
   async getAirdrop(address: string, amount: string, token: string) {
     try {
-      const result = await axiosInstance.get(`https://faucet-api.sonic.game/airdrop/${address}/${amount}/${token}`);
+      const result = await axiosInstance.get(`https://faucet-api2.sonic.game/airdrop/${address}/${amount}/${token}`);
       return result;
     } catch (error) {
       throw error;
