@@ -33,8 +33,8 @@ import apis from '@/apis';
 import utils from '@/utils';
 import VueTurnstile from 'vue-turnstile';
 
-const rpc = 'https://devnet.sonic.game';
-const explorer = 'https://explorer.sonic.game/tx/';
+const rpc = 'https://devnet2.sonic.game';
+const explorer = 'https://explorer2.sonic.game/tx/';
 const amount = '1';
 const addressVal = ref('');
 const token = ref('');
