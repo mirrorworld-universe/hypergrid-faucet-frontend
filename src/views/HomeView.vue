@@ -84,13 +84,13 @@ const handleClaim = () => {
         loading.value = false;
         console.error(error);
         if (error.status == 429) {
-          message.error('Too many requests! Please try again in 24 hours!');
+          message.error('You already received the airdrop! Please try again in 24 hours.');
         } else {
           message.error('Airdrop failed');
         }
       });
   } else {
-    message.info('Please try again in 24 hours!');
+    message.info('You already received the airdrop! Please try again in 24 hours.');
   }
 };
 </script>
@@ -126,9 +126,6 @@ const handleClaim = () => {
       top: 20px;
     }
     .text {
-      font-family: Orbitron;
-      font-weight: 200;
-      font-size: 16px;
       display: flex;
       align-items: center;
       .tag {
@@ -144,13 +141,13 @@ const handleClaim = () => {
         box-shadow: 0 0 3px 3px rgba(0, 0, 255, 0.3);
       }
       span {
+        font-family: Orbitron;
+        font-weight: 200;
+        font-size: 16px;
         margin-right: 20px;
       }
     }
   }
-}
-.ant-btn-default {
-  color: #fff;
 }
 
 @media screen and (max-width: 750px) {
