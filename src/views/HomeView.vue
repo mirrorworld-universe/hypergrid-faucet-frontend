@@ -86,13 +86,13 @@ const handleClaim = () => {
         loading.value = false;
         console.error(error);
         if (error.status == 429) {
-          message.error('Too many requests! Please try again in 24 hours!');
+          message.error('You already received the airdrop! Please try again in 24 hours.');
         } else {
           message.error('Airdrop failed');
         }
       });
   } else {
-    message.info('Please try again in 24 hours!');
+    message.info('You already received the airdrop! Please try again in 24 hours.');
   }
 };
 </script>
