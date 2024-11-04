@@ -23,7 +23,7 @@
       </div>
 
       <div class="important">
-        To maintain adequate balances for all users, the Faucet distributes 0.5 Test SOL every 8 hours.
+        To maintain adequate balances for all users, the Faucet distributes 0.5 Test hSOL every 8 hours.
       </div>
 
       <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAc6HG1RMG_8EHSC" v-model="token" />
@@ -55,31 +55,16 @@ const loading = ref(false);
 const disabled = ref(false);
 const turnstile: any = ref(null);
 
-const networkVal: any = ref('devnet');
-
 const networkList = ref([
   {
-    label: 'Devnet',
-    value: 'devnet',
-    rpcApi: 'https://api.devnet.sonic.game',
-    faucetApi: 'https://faucet-api.sonic.game',
-    explorer: (tx) => `https://explorer.sonic.game/tx/${tx}`
-  },
-  {
-    label: 'Testnet V0',
-    value: 'testnet.v0',
-    rpcApi: 'https://api.testnet.v0.sonic.game',
-    faucetApi: 'https://faucet-api-grid-1.sonic.game',
-    explorer: (tx) => `https://explorer.sonic.game/tx/${tx}?cluster=testnet.v0`
-  },
-  {
-    label: 'Testnet V1',
+    label: 'Testnet',
     value: 'testnet.v1',
     rpcApi: 'https://api.testnet.v1.sonic.game',
-    faucetApi: 'https://faucet-api-grid-1-v1.sonic.game',
-    explorer: (tx) => `https://explorer.sonic.game/tx/${tx}?cluster=testnet.v1`
+    faucetApi: 'https://faucet-api-hssn-v1.sonic.game',
+    explorer: (tx) => `https://explorer-hssn.sonic.game/tx/${tx}?cluster=testnet.v1`
   }
 ]);
+const networkVal: any = ref(networkList.value[0].value);
 
 watchEffect(() => {
   if (route.query.network) {
