@@ -61,7 +61,7 @@ const networkList = ref([
     value: 'testnet.v1',
     rpcApi: 'https://api.testnet.v1.sonic.game',
     faucetApi: 'https://faucet-api-hssn-v1.sonic.game',
-    explorer: (tx) => `https://explorer-hssn.sonic.game/tx/${tx}?cluster=testnet.v1`
+    explorer: (tx) => `https://explorer.sonic.game/tx/${tx}?cluster=testnet.v1`
   }
 ]);
 const networkVal: any = ref(networkList.value[0].value);
