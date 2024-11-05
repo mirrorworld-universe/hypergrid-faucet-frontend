@@ -26,7 +26,7 @@
         To maintain adequate balances for all users, the Faucet distributes 0.5 Test hSOL every 8 hours.
       </div>
 
-      <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAc6HG1RMG_8EHSC" v-model="token" />
+      <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAzMCQ0jOq3M6PGr" v-model="token" />
 
       <div class="confirm">
         <a-button type="primary" size="large" block :loading="loading" :disabled="disabled" @click="handleClaim">
