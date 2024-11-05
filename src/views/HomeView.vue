@@ -23,7 +23,7 @@
       </div>
 
       <div class="important">
-        To maintain adequate balances for all users, the Faucet distributes 0.5 Test hSOL every 8 hours.
+        To maintain adequate balances for all users, the Faucet distributes 1 Test hSOL every 8 hours.
       </div>
 
       <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAzMCQ0jOq3M6PGr" v-model="token" />
@@ -48,7 +48,7 @@ import VueTurnstile from 'vue-turnstile';
 const route = useRoute();
 const router = useRouter();
 
-const amount = '0.5';
+const amount = '1';
 const addressVal = ref('');
 const token = ref('');
 const loading = ref(false);
