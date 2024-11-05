@@ -61,7 +61,7 @@ const networkList = ref([
     value: 'testnet.v1',
     rpcApi: 'https://api.testnet.v1.sonic.game',
     faucetApi: 'https://faucet-api-hssn-v1.sonic.game',
-    explorer: (tx) => `https://explorer.sonic.game/tx/${tx}?cluster=testnet.v1`
+    explorer: (tx) => `https://explorer-hssn.testnet.sonic.game/txs/${tx}`
   }
 ]);
 const networkVal: any = ref(networkList.value[0].value);
@@ -96,13 +96,11 @@ const handleClaim = async () => {
     .then((res: any) => {
       console.log('getAirdrop', res.data);
       loading.value = false;
-
       if (res.data.data) {
-        if (res.data.data.error) return message.error(res.data.data.error);
-        const tx = res.data.data.replace(/\n/g, '').replace('Signature: ', '');
-        console.log('tx', tx);
+        if (res.data.err) return message.error(res.data.err);
+        const txhashMatch = res.data.data.match(/txhash:\s*(\w+)/);
+        const tx = txhashMatch ? txhashMatch[1] : null;
         disabled.value = true;
-
         notification.success({
           message: 'Airdrop was successful!',
           description: () => {
