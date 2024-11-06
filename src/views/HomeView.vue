@@ -34,7 +34,7 @@
           size="large"
           block
           :loading="loading"
-          :disabled="!addressVal || !isValidSolanaAddress(addressVal) || !token"
+          :disabled="!addressVal || !token"
           @click="handleClaim">
           Confirm Airdrop
         </a-button>
@@ -50,7 +50,6 @@ import { message, notification } from 'ant-design-vue';
 import apis from '@/apis';
 import utils from '@/utils';
 import VueTurnstile from 'vue-turnstile';
-import { PublicKey } from '@solana/web3.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -85,22 +84,13 @@ watchEffect(() => {
   }
 });
 
-function isValidSolanaAddress(address) {
-  try {
-    const publicKey = new PublicKey(address);
-    return publicKey.toString() === address;
-  } catch (error) {
-    return false;
-  }
-}
-
 const handleChange = (value: string) => {
   if (loading.value) return;
   router.push({ query: { network: value } });
 };
 
 const handleClaim = async () => {
-  if (loading.value || !addressVal.value || !isValidSolanaAddress(addressVal.value) || !token.value) return;
+  if (loading.value || !addressVal.value || !token.value) return;
 
   loading.value = true;
   const network = networkList.value.find((item: any) => item.value === networkVal.value);
@@ -126,7 +116,11 @@ const handleClaim = async () => {
           duration: null
         });
       } else {
-        message.error(res.data.err);
+        if (res.data.err.indexOf('invalid bech32 string length 6') > -1) {
+          message.error('Invalid address');
+        } else {
+          message.error(res.data.err);
+        }
       }
     })
     .catch((error) => {
