@@ -116,7 +116,7 @@ const handleClaim = async () => {
           duration: null
         });
       } else {
-        if (res.data.err.indexOf('invalid bech32 string length 6') > -1) {
+        if (res.data.err.indexOf('invalid bech32 string') > -1) {
           message.error('Invalid address');
         } else {
           message.error(res.data.err);
