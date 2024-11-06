@@ -104,7 +104,7 @@ const handleClaim = async () => {
 
   loading.value = true;
   const network = networkList.value.find((item: any) => item.value === networkVal.value);
-  const url = `${network?.faucetApi}/airdrop/${addressVal.value.toLowerCase()}/${amount}/${token.value}`;
+  const url = `${network?.faucetApi}/airdrop/${addressVal.value}/${amount}/${token.value}`;
   apis
     .getAirdrop(url)
     .then((res: any) => {
