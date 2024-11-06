@@ -34,7 +34,7 @@
           size="large"
           block
           :loading="loading"
-          :disabled="!addressVal || !token || !isValidSolAddress(addressVal)"
+          :disabled="!addressVal || !isValidSolAddress(addressVal) || !token"
           @click="handleClaim">
           Confirm Airdrop
         </a-button>
@@ -102,8 +102,7 @@ const handleChange = (value: string) => {
 };
 
 const handleClaim = async () => {
-  if (loading.value || !addressVal.value || !token.value) return;
-  if (!isValidSolAddress(addressVal.value)) return;
+  if (loading.value || !addressVal.value || !isValidSolAddress(addressVal.value) || !token.value) return;
 
   loading.value = true;
   const network = networkList.value.find((item: any) => item.value === networkVal.value);
