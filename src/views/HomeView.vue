@@ -34,7 +34,7 @@
           size="large"
           block
           :loading="loading"
-          :disabled="!addressVal || !isValidSolAddress(addressVal) || !token"
+          :disabled="!addressVal || !isValidSolanaAddress(addressVal) || !token"
           @click="handleClaim">
           Confirm Airdrop
         </a-button>
@@ -50,6 +50,7 @@ import { message, notification } from 'ant-design-vue';
 import apis from '@/apis';
 import utils from '@/utils';
 import VueTurnstile from 'vue-turnstile';
+import { PublicKey } from '@solana/web3.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -84,16 +85,13 @@ watchEffect(() => {
   }
 });
 
-function isValidSolAddress(address) {
-  // SOL地址通常是44个字符的Base58字符串
-  const solRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-  return solRegex.test(address);
-}
-
-function isValidCosmosAddress(address) {
-  // Cosmos地址通常是Bech32格式，前缀为"cosmos"
-  const cosmosRegex = /^cosmos1[0-9a-z]{38}$/;
-  return cosmosRegex.test(address);
+function isValidSolanaAddress(address) {
+  try {
+    const publicKey = new PublicKey(address);
+    return publicKey.toString() === address;
+  } catch (error) {
+    return false;
+  }
 }
 
 const handleChange = (value: string) => {
@@ -102,7 +100,7 @@ const handleChange = (value: string) => {
 };
 
 const handleClaim = async () => {
-  if (loading.value || !addressVal.value || !isValidSolAddress(addressVal.value) || !token.value) return;
+  if (loading.value || !addressVal.value || !isValidSolanaAddress(addressVal.value) || !token.value) return;
 
   loading.value = true;
   const network = networkList.value.find((item: any) => item.value === networkVal.value);
