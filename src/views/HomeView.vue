@@ -98,10 +98,9 @@ const handleClaim = async () => {
   apis
     .getAirdrop(url)
     .then((res: any) => {
-      console.log('getAirdrop', res.data);
+      console.log('getAirdrop', res);
       loading.value = false;
       if (res.data.data) {
-        if (res.data.err) return message.error(res.data.err);
         const txhashMatch = res.data.data.match(/txhash:\s*(\w+)/);
         const tx = txhashMatch ? txhashMatch[1] : null;
         notification.success({
@@ -116,7 +115,7 @@ const handleClaim = async () => {
           duration: null
         });
       } else {
-        if (res.data.err.indexOf('invalid bech32 string') > -1) {
+        if (res.data.err.indexOf('invalid bech32 string') > 0) {
           message.error('Invalid address');
         } else {
           message.error(res.data.err);
