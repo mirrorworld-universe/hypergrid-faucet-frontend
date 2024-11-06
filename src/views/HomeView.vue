@@ -27,7 +27,7 @@
         <div class="balance">
           {{ utils.formatNumber(solBalance, 2) }}
           <template v-if="addressVal">
-            <CloseCircleFilled v-if="solBalance > 0.01" />
+            <CloseCircleFilled v-if="solBalance < 0.01" />
             <CheckCircleFilled v-else />
           </template>
         </div>
