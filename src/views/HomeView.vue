@@ -22,6 +22,18 @@
         <div class="tag">{{ amount }}</div>
       </div>
 
+      <div class="text">
+        <span>Mainnet SOL balance: </span>
+        <div class="balance">
+          {{ utils.formatNumber(solBalance, 2) }}
+          <template v-if="addressVal">
+            <CloseCircleFilled v-if="solBalance > 0.01" />
+            <CheckCircleFilled v-else />
+          </template>
+        </div>
+      </div>
+      <div class="important">You need at least 0.01 SOL in your wallet on Solana Mainnet to access the faucet.</div>
+
       <div class="important">
         To maintain adequate balances for all users, the Faucet distributes 1 Test hSOL every 8 hours.
       </div>
@@ -29,7 +41,13 @@
       <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAzMCQ0jOq3M6PGr" v-model="token" />
 
       <div class="confirm">
-        <a-button type="primary" size="large" block :loading="loading" :disabled="disabled" @click="handleClaim">
+        <a-button
+          type="primary"
+          size="large"
+          block
+          :loading="loading"
+          :disabled="!addressVal || !token || solBalance < 0.01"
+          @click="handleClaim">
           Confirm Airdrop
         </a-button>
       </div>
@@ -38,12 +56,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, watchEffect, ref, h } from 'vue';
+import { onMounted, watchEffect, ref, h, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { message, notification } from 'ant-design-vue';
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons-vue';
 import apis from '@/apis';
 import utils from '@/utils';
 import VueTurnstile from 'vue-turnstile';
+import { Connection, PublicKey } from '@solana/web3.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -52,8 +72,8 @@ const amount = '1';
 const addressVal = ref('');
 const token = ref('');
 const loading = ref(false);
-const disabled = ref(false);
 const turnstile: any = ref(null);
+const solBalance = ref(0);
 
 const networkList = ref([
   {
@@ -71,12 +91,24 @@ watchEffect(() => {
     const network = networkList.value.find((item: any) => item.value === route.query.network);
     if (network) {
       networkVal.value = route.query.network;
-      disabled.value = false;
       if (turnstile.value) turnstile.value.reset();
     }
   }
   if (route.query.wallet) {
     addressVal.value = route.query.wallet as string;
+  }
+});
+
+watch(addressVal, async (_addressVal) => {
+  if (!_addressVal) return (solBalance.value = 0);
+
+  const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/6BzorHtAxXZTGVDOxuzQ9rCk_q_qpXgj');
+  try {
+    const publicKey = new PublicKey(_addressVal);
+    const balance = await connection.getBalance(publicKey);
+    solBalance.value = balance / 1e9;
+  } catch (error) {
+    console.log('Unable to get mainnet wallet balance');
   }
 });
 
@@ -86,7 +118,7 @@ const handleChange = (value: string) => {
 };
 
 const handleClaim = async () => {
-  if (loading.value || !addressVal.value || !token.value) return;
+  if (loading.value || !addressVal.value || !token.value || solBalance.value < 0.01) return;
 
   loading.value = true;
   const network = networkList.value.find((item: any) => item.value === networkVal.value);
@@ -100,7 +132,6 @@ const handleClaim = async () => {
         if (res.data.err) return message.error(res.data.err);
         const txhashMatch = res.data.data.match(/txhash:\s*(\w+)/);
         const tx = txhashMatch ? txhashMatch[1] : null;
-        disabled.value = true;
         notification.success({
           message: 'Airdrop was successful!',
           description: () => {
@@ -129,7 +160,6 @@ const handleClaim = async () => {
         message.error(error.data.error);
       } else if (error.status == 429) {
         message.error(error.data.message);
-        disabled.value = true;
       } else {
         message.error('Airdrop failed');
       }
@@ -190,6 +220,18 @@ const handleClaim = async () => {
         border: 1px solid #0000ff;
         box-shadow: 0 0 3px 3px rgba(0, 0, 255, 0.3);
       }
+      .balance {
+        font-family: Manrope;
+        font-weight: 700;
+        font-size: 18px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        .anticon {
+          margin-left: 20px;
+          font-size: 20px;
+        }
+      }
       span {
         font-family: Orbitron;
         font-weight: 200;
@@ -198,6 +240,13 @@ const handleClaim = async () => {
       }
     }
   }
+}
+
+.anticon.anticon-close-circle {
+  color: #de1303;
+}
+.anticon.anticon-check-circle {
+  color: #0aa937;
 }
 
 @media screen and (max-width: 750px) {
