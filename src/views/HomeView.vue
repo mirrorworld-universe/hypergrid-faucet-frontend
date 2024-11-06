@@ -29,7 +29,13 @@
       <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAzMCQ0jOq3M6PGr" v-model="token" />
 
       <div class="confirm">
-        <a-button type="primary" size="large" block :loading="loading" :disabled="disabled" @click="handleClaim">
+        <a-button
+          type="primary"
+          size="large"
+          block
+          :loading="loading"
+          :disabled="!addressVal || !token || !isValidSolAddress(addressVal)"
+          @click="handleClaim">
           Confirm Airdrop
         </a-button>
       </div>
@@ -52,7 +58,6 @@ const amount = '1';
 const addressVal = ref('');
 const token = ref('');
 const loading = ref(false);
-const disabled = ref(false);
 const turnstile: any = ref(null);
 
 const networkList = ref([
@@ -71,7 +76,6 @@ watchEffect(() => {
     const network = networkList.value.find((item: any) => item.value === route.query.network);
     if (network) {
       networkVal.value = route.query.network;
-      disabled.value = false;
       if (turnstile.value) turnstile.value.reset();
     }
   }
@@ -80,6 +84,18 @@ watchEffect(() => {
   }
 });
 
+function isValidSolAddress(address) {
+  // SOL地址通常是44个字符的Base58字符串
+  const solRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+  return solRegex.test(address);
+}
+
+function isValidCosmosAddress(address) {
+  // Cosmos地址通常是Bech32格式，前缀为"cosmos"
+  const cosmosRegex = /^cosmos1[0-9a-z]{38}$/;
+  return cosmosRegex.test(address);
+}
+
 const handleChange = (value: string) => {
   if (loading.value) return;
   router.push({ query: { network: value } });
@@ -87,6 +103,7 @@ const handleChange = (value: string) => {
 
 const handleClaim = async () => {
   if (loading.value || !addressVal.value || !token.value) return;
+  if (!isValidSolAddress(addressVal.value)) return;
 
   loading.value = true;
   const network = networkList.value.find((item: any) => item.value === networkVal.value);
@@ -100,7 +117,6 @@ const handleClaim = async () => {
         if (res.data.err) return message.error(res.data.err);
         const txhashMatch = res.data.data.match(/txhash:\s*(\w+)/);
         const tx = txhashMatch ? txhashMatch[1] : null;
-        disabled.value = true;
         notification.success({
           message: 'Airdrop was successful!',
           description: () => {
@@ -113,14 +129,7 @@ const handleClaim = async () => {
           duration: null
         });
       } else {
-        if (
-          res.data.err ==
-          'Usage:\n  hypergrid-ssnd tx bank send [from_key_or_address] [to_address] [amount] [flags]\n\nFlags:\n  -a, --account-number uint      The account number of the signing account (offline mode only)\n      --aux                      Generate aux signer data instead of sending a tx\n  -b, --broadcast-mode string    Transaction broadcasting mode (sync|async) (default "sync")\n      --chain-id string          The network chain ID\n      --dry-run                  ignore the --gas flag and perform a simulation of a transaction, but don\'t broadcast it (when enabled, the local Keybase is not accessible)\n      --fee-granter string       Fee granter grants fees for the transaction\n      --fee-payer string         Fee payer pays fees for the transaction instead of deducting from the signer\n      --fees string              Fees to pay along with transaction; eg: 10uatom\n      --from string              Name or address of private key with which to sign\n      --gas string               gas limit to set per-transaction; set to "auto" to calculate sufficient gas automatically. Note: "auto" option doesn\'t always report accurate results. Set a valid coin value to adjust the result. Can be used instead of "fees". (default 200000)\n      --gas-adjustment float     adjustment factor to be multiplied against the estimate returned by the tx simulation; if the gas limit is set manually this flag is ignored  (default 1)\n      --gas-prices string        Gas prices in decimal format to determine the transaction fee (e.g. 0.1uatom)\n      --generate-only            Build an unsigned transaction and write it to STDOUT (when enabled, the local Keybase only accessed when providing a key name)\n  -h, --help                     help for send\n      --keyring-backend string   Select keyring\'s backend (os|file|kwallet|pass|test|memory) (default "os")\n      --keyring-dir string       The client Keyring directory; if omitted, the default \'home\' directory will be used\n      --ledger                   Use a connected Ledger device\n      --node string              <host>:<port> to CometBFT rpc interface for this chain (default "tcp://localhost:26657")\n      --note string              Note to add a description to the transaction (previously --memo)\n      --offline                  Offline mode (does not allow any online functionality)\n  -o, --output string            Output format (text|json) (default "json")\n  -s, --sequence uint            The sequence number of the signing account (offline mode only)\n      --sign-mode string         Choose sign mode (direct|amino-json|direct-aux|textual), this is an advanced feature\n      --timeout-height uint      Set a block timeout height to prevent the tx from being committed past a certain height\n      --tip string               Tip is the amount that is going to be transferred to the fee payer on the target chain. This flag is only valid when used with --aux, and is ignored if the target chain didn\'t enable the TipDecorator\n  -y, --yes                      Skip tx broadcasting prompt confirmation\n\nGlobal Flags:\n      --home string         directory for config and data (default "/home/ubuntu/.hypergrid-ssn")\n      --log_format string   The logging format (json|plain) (default "plain")\n      --log_level string    The logging level (trace|debug|info|warn|error|fatal|panic|disabled or \'*:<level>,<key>:<level>\') (default "info")\n      --log_no_color        Disable colored logs\n      --trace               print out full stack trace on errors\n\ndecoding bech32 failed: invalid bech32 string length 4\n'
-        ) {
-          message.error('Invalid address');
-        } else {
-          message.error(res.data.err);
-        }
+        message.error(res.data.err);
       }
     })
     .catch((error) => {
@@ -130,7 +139,6 @@ const handleClaim = async () => {
         message.error(error.data.error);
       } else if (error.status == 429) {
         message.error(error.data.message);
-        disabled.value = true;
       } else {
         message.error('Airdrop failed');
       }
