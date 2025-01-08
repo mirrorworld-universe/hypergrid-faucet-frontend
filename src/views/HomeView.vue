@@ -100,10 +100,10 @@ const handleClaim = async () => {
     .then((res: any) => {
       console.log('getAirdrop', res);
       loading.value = false;
-      if (res.data.status == 'ok') {
+      if (res.status == 'ok') {
         message.success('Airdrop was successful!');
       } else {
-        message.error(res.data.error);
+        message.error(res.error);
       }
     })
     .catch((error) => {
