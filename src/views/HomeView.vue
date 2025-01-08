@@ -100,38 +100,16 @@ const handleClaim = async () => {
     .then((res: any) => {
       console.log('getAirdrop', res);
       loading.value = false;
-      if (res.data.data) {
-        const txhashMatch = res.data.data.match(/txhash:\s*(\w+)/);
-        const tx = txhashMatch ? txhashMatch[1] : null;
-        notification.success({
-          message: 'Airdrop was successful!',
-          description: () => {
-            return h('a', {
-              href: network?.explorer(tx),
-              target: '_blank',
-              innerHTML: network?.explorer(utils.formatAddr(tx))
-            });
-          },
-          duration: null
-        });
+      if (res.data.status == 'ok') {
+        message.success('Airdrop was successful!');
       } else {
-        if (res.data.err.indexOf('invalid bech32 string') > 0) {
-          message.error('Invalid address');
-        } else {
-          message.error(res.data.err);
-        }
+        message.error(res.data.error);
       }
     })
     .catch((error) => {
       loading.value = false;
       console.error(error);
-      if (error.status == 401) {
-        message.error(error.data.error);
-      } else if (error.status == 429) {
-        message.error(error.data.message);
-      } else {
-        message.error('Airdrop failed');
-      }
+      message.error(error.data.error);
     });
 };
 </script>
