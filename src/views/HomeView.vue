@@ -70,7 +70,7 @@ import { Connection, PublicKey } from '@solana/web3.js';
 const route = useRoute();
 const router = useRouter();
 
-const amount = '0.5';
+const amount = '5';
 const addressVal = ref('');
 const token = ref('');
 const loading = ref(false);
