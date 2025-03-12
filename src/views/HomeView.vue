@@ -22,20 +22,6 @@
         <div class="tag">{{ amount }}</div>
       </div>
 
-      <template v-if="networkVal == 'testnet.v1'">
-        <div class="text">
-          <span>Mainnet SOL balance: </span>
-          <div class="balance">
-            {{ utils.formatNumber(solBalance, 2) }}
-            <template v-if="addressVal">
-              <CloseCircleFilled v-if="solBalance < 0.01" />
-              <CheckCircleFilled v-else />
-            </template>
-          </div>
-        </div>
-        <div class="important">You need at least 0.01 SOL in your wallet on Solana Mainnet to access the faucet.</div>
-      </template>
-
       <div class="important">
         To maintain adequate balances for all users, the Faucet distributes 5 Test SOL every 8 hours.
       </div>
@@ -58,14 +44,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, watchEffect, ref, h, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { message, notification } from 'ant-design-vue';
-import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons-vue';
 import apis from '@/apis';
 import utils from '@/utils';
+import { message, notification } from 'ant-design-vue';
+import { h, ref, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import VueTurnstile from 'vue-turnstile';
-import { Connection, PublicKey } from '@solana/web3.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -78,20 +62,6 @@ const turnstile: any = ref(null);
 const solBalance = ref(0);
 
 const networkList = ref([
-  // {
-  //   label: 'Devnet',
-  //   value: 'devnet',
-  //   rpcApi: 'https://api.devnet.sonic.game',
-  //   faucetApi: 'https://faucet-api.sonic.game',
-  //   explorer: (tx) => `https://explorer.sonic.game/tx/${tx}`
-  // },
-  // {
-  //   label: 'Testnet V0',
-  //   value: 'testnet.v0',
-  //   rpcApi: 'https://api.testnet.v0.sonic.game',
-  //   faucetApi: 'https://faucet-api-grid-1.sonic.game',
-  //   explorer: (tx) => `https://explorer.sonic.game/tx/${tx}?cluster=testnet.v0`
-  // },
   {
     label: 'Testnet V1',
     value: 'testnet.v1',
@@ -115,30 +85,30 @@ watchEffect(() => {
   }
 });
 
-watch(
-  [addressVal, networkVal],
-  ([_addressVal, _networkVal]) => {
-    getBalance();
-  },
-  { immediate: true }
-);
+// watch(
+//   [addressVal, networkVal],
+//   ([_addressVal, _networkVal]) => {
+//     getBalance();
+//   },
+//   { immediate: true }
+// );
 
-async function getBalance() {
-  console.log('addressVal', addressVal.value);
-  console.log('networkVal', networkVal.value);
+// async function getBalance() {
+//   console.log('addressVal', addressVal.value);
+//   console.log('networkVal', networkVal.value);
 
-  if (!addressVal.value) return (solBalance.value = 0);
-  if (networkVal.value !== 'testnet.v1') return;
-  const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/6BzorHtAxXZTGVDOxuzQ9rCk_q_qpXgj');
-  try {
-    const publicKey = new PublicKey(addressVal.value);
-    const balance = await connection.getBalance(publicKey);
-    solBalance.value = balance / 1e9;
-    console.log('solBalance', solBalance.value);
-  } catch (error) {
-    console.log('Unable to get mainnet wallet balance');
-  }
-}
+//   if (!addressVal.value) return (solBalance.value = 0);
+//   if (networkVal.value !== 'testnet.v1') return;
+//   const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/6BzorHtAxXZTGVDOxuzQ9rCk_q_qpXgj');
+//   try {
+//     const publicKey = new PublicKey(addressVal.value);
+//     const balance = await connection.getBalance(publicKey);
+//     solBalance.value = balance / 1e9;
+//     console.log('solBalance', solBalance.value);
+//   } catch (error) {
+//     console.log('Unable to get mainnet wallet balance');
+//   }
+// }
 
 const handleChange = (value: string) => {
   if (loading.value) return;
@@ -149,10 +119,10 @@ const handleClaim = async () => {
   if (
     loading.value ||
     !addressVal.value ||
-    !token.value ||
-    (networkVal.value == 'testnet.v1' && solBalance.value < 0.01)
-  )
+    !token.value
+  ){
     return;
+  }
 
   loading.value = true;
   const network = networkList.value.find((item: any) => item.value === networkVal.value);
