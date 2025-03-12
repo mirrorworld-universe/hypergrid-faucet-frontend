@@ -37,7 +37,7 @@
       </template>
 
       <div class="important">
-        To maintain adequate balances for all users, the Faucet distributes 0.5 Test SOL every 8 hours.
+        To maintain adequate balances for all users, the Faucet distributes 5 Test SOL every 8 hours.
       </div>
 
       <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAc6HG1RMG_8EHSC" v-model="token" />
