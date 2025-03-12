@@ -34,7 +34,7 @@
           size="large"
           block
           :loading="loading"
-          :disabled="!addressVal || !token || (networkVal == 'testnet.v1' && solBalance < 0.01)"
+          :disabled="!addressVal || !token"
           @click="handleClaim">
           Confirm Airdrop
         </a-button>
