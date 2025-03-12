@@ -163,9 +163,9 @@ const handleClaim = async () => {
       console.log('getAirdrop', res.data);
       loading.value = false;
 
-      if (res.data.data) {
-        if (res.data.data.error) return message.error(res.data.data.error);
-        const tx = res.data.data.replace(/\n/g, '').replace('Signature: ', '');
+      if (res.data) {
+        if (res.error) return message.error(res.error);
+        const tx = res.data.replace(/\n/g, '').replace('Signature: ', '');
         console.log('tx', tx);
 
         notification.success({
@@ -185,7 +185,7 @@ const handleClaim = async () => {
         ) {
           message.error('Invalid address');
         } else {
-          message.error(res.data.err);
+          message.error(res.err);
         }
       }
     })
