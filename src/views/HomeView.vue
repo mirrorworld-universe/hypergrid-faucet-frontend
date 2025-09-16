@@ -32,9 +32,10 @@
         Test SOL every 8 hours.
       </div>
 
+      <!-- Turnstile Sitekey for faucet.sonicsvm.org -->
       <vue-turnstile
         ref="turnstile"
-        site-key="0x4AAAAAAAc6HG1RMG_8EHSC"
+        site-key="0x4AAAAAAB1lVqRw6UCgT_O-"
         v-model="token"
       />
 
