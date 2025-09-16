@@ -32,7 +32,11 @@
         Test SOL every 8 hours.
       </div>
 
-      <!-- <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAc6HG1RMG_8EHSC" v-model="token" /> -->
+      <vue-turnstile
+        ref="turnstile"
+        site-key="0x4AAAAAAAc6HG1RMG_8EHSC"
+        v-model="token"
+      />
 
       <div class="confirm">
         <a-button
