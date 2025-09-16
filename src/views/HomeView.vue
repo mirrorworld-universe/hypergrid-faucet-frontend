@@ -12,10 +12,15 @@
           style="width: 220px"
           v-model:value="networkVal"
           :options="networkList"
-          @change="handleChange"></a-select>
+          @change="handleChange"
+        ></a-select>
       </div>
       <div class="inputbox">
-        <a-input v-model:value="addressVal" placeholder="Wallet Address" size="large" />
+        <a-input
+          v-model:value="addressVal"
+          placeholder="Wallet Address"
+          size="large"
+        />
       </div>
       <div class="text">
         <span>Amount: </span>
@@ -23,10 +28,11 @@
       </div>
 
       <div class="important">
-        To maintain adequate balances for all users, the Faucet distributes 5 Test SOL every 8 hours.
+        To maintain adequate balances for all users, the Faucet distributes 5
+        Test SOL every 8 hours.
       </div>
 
-      <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAc6HG1RMG_8EHSC" v-model="token" />
+      <!-- <vue-turnstile ref="turnstile" site-key="0x4AAAAAAAc6HG1RMG_8EHSC" v-model="token" /> -->
 
       <div class="confirm">
         <a-button
@@ -35,7 +41,8 @@
           block
           :loading="loading"
           :disabled="!addressVal || !token"
-          @click="handleClaim">
+          @click="handleClaim"
+        >
           Confirm Airdrop
         </a-button>
       </div>
@@ -44,37 +51,39 @@
 </template>
 
 <script lang="ts" setup>
-import apis from '@/apis';
-import utils from '@/utils';
-import { message, notification } from 'ant-design-vue';
-import { h, ref, watchEffect } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import VueTurnstile from 'vue-turnstile';
+import apis from "@/apis";
+import utils from "@/utils";
+import { message, notification } from "ant-design-vue";
+import { h, ref, watchEffect } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import VueTurnstile from "vue-turnstile";
 
 const route = useRoute();
 const router = useRouter();
 
-const amount = '5';
-const addressVal = ref('');
-const token = ref('');
+const amount = "5";
+const addressVal = ref("");
+const token = ref("");
 const loading = ref(false);
 const turnstile: any = ref(null);
 const solBalance = ref(0);
 
 const networkList = ref([
   {
-    label: 'Testnet V1',
-    value: 'testnet.v1',
-    rpcApi: 'https://api.testnet.v1.sonic.game',
-    faucetApi: 'https://faucet-api-grid-1-v1.sonic.game',
-    explorer: (tx) => `https://explorer.sonic.game/tx/${tx}?cluster=testnet.v1`
-  }
+    label: "Testnet V1",
+    value: "testnet.v1",
+    rpcApi: "https://api.testnet.v1.sonic.game",
+    faucetApi: "https://faucet-api-grid-1-v1.sonic.game",
+    explorer: (tx) => `https://explorer.sonic.game/tx/${tx}?cluster=testnet.v1`,
+  },
 ]);
 const networkVal: any = ref(networkList.value[0].value);
 
 watchEffect(() => {
   if (route.query.network) {
-    const network = networkList.value.find((item: any) => item.value === route.query.network);
+    const network = networkList.value.find(
+      (item: any) => item.value === route.query.network
+    );
     if (network) {
       networkVal.value = route.query.network;
       if (turnstile.value) turnstile.value.reset();
@@ -116,44 +125,43 @@ const handleChange = (value: string) => {
 };
 
 const handleClaim = async () => {
-  if (
-    loading.value ||
-    !addressVal.value ||
-    !token.value
-  ){
+  if (loading.value || !addressVal.value || !token.value) {
     return;
   }
 
   loading.value = true;
-  const network = networkList.value.find((item: any) => item.value === networkVal.value);
+  const network = networkList.value.find(
+    (item: any) => item.value === networkVal.value
+  );
   const url = `${network?.faucetApi}/airdrop/${addressVal.value}/${amount}/${token.value}`;
   apis
     .getAirdrop(url)
     .then((res: any) => {
-      console.log('getAirdrop', res.data);
+      console.log("getAirdrop", res.data);
       loading.value = false;
 
       if (res.data) {
         if (res.error) return message.error(res.error);
-        const tx = res.data.replace(/\n/g, '').replace('Signature: ', '');
-        console.log('tx', tx);
+        const tx = res.data.replace(/\n/g, "").replace("Signature: ", "");
+        console.log("tx", tx);
 
         notification.success({
-          message: 'Airdrop was successful!',
+          message: "Airdrop was successful!",
           description: () => {
-            return h('a', {
+            return h("a", {
               href: network?.explorer(tx),
-              target: '_blank',
-              innerHTML: network?.explorer(utils.formatAddr(tx))
+              target: "_blank",
+              innerHTML: network?.explorer(utils.formatAddr(tx)),
             });
           },
-          duration: null
+          duration: null,
         });
       } else {
         if (
-          res.data.err == "error: Invalid value for '<RECIPIENT_ADDRESS>': No such file or directory (os error 2)\n"
+          res.data.err ==
+          "error: Invalid value for '<RECIPIENT_ADDRESS>': No such file or directory (os error 2)\n"
         ) {
-          message.error('Invalid address');
+          message.error("Invalid address");
         } else {
           message.error(res.err);
         }
@@ -167,7 +175,7 @@ const handleClaim = async () => {
       } else if (error.status == 429) {
         message.error(error.data.message);
       } else {
-        message.error('Airdrop failed');
+        message.error("Airdrop failed");
       }
     });
 };
